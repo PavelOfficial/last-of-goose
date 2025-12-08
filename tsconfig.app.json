@@ -26,6 +26,7 @@
     "paths": {
       "domain/*": ["./src/domain/*"],
       "query/*": ["./src/query/*"],
+      "assets/*": ["./src/assets/*"],
     },
   },
   "include": ["src"]

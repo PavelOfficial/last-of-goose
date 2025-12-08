@@ -3,8 +3,10 @@ import React from "react"
 import { Layout, theme } from "antd"
 import { Navigate, Route, Routes } from "react-router"
 import { Content, Header, Footer } from "antd/es/layout/layout"
+
 import PageRounds from "./Routes/PageRounds/PageRounds"
 import PageAuth from "./Routes/PageAuth"
+import PageRoundItem from "./Routes/PageRoundItem/PageRoundItem"
 
 
 type Props = {
@@ -37,6 +39,7 @@ export const AppRoutes = () => {
       <Routes>
         <Route path="/auth" element={<PageAuth />} />
         <Route path="/rounds" element={<PageRounds />} />
+        <Route path="/rounds/:id" element={<PageRoundItem />} />
         <Route path="*" element={<Navigate to="/auth" replace />} />
       </Routes>
     </AppLayout>

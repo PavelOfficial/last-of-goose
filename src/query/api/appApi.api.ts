@@ -4,7 +4,7 @@ import { baseQuery } from "../baseQuery"
 
 import type { User } from "domain/user";
 import type { Pagination } from "../../libs/Pagination";
-import type { Round } from "domain/Rounds";
+import type { EnhancedRoundInfo, Round } from "domain/Rounds";
 
 export const appApi = createApi({
   reducerPath: "vdsinaAuth",
@@ -13,7 +13,7 @@ export const appApi = createApi({
   endpoints: (build) => {
     const authEndpoints = {
       // User groups
-      authMe: build.query<User, string | null | undefined>({
+      authMe: build.query<User, string | null | void>({
         query: (_)=> {
           return {
             url: `/auth/me`,
@@ -45,7 +45,7 @@ export const appApi = createApi({
           return ["authentificated"]
         },
       }),
-      authLogout: build.mutation<unknown, {}>({
+      authLogout: build.mutation<unknown, void>({
         query: () => {
           return {
             url: `/auth/logout`,
@@ -56,7 +56,7 @@ export const appApi = createApi({
           return ["authentificated"]
         },
       }),
-      rounds: build.query<Pagination<Round>, unknown>({
+      rounds: build.query<Pagination<Round>, void>({
         query: () => {
           return {
             url: `/rounds`,
@@ -67,7 +67,18 @@ export const appApi = createApi({
           return ["rounds"]
         },
       }),
-      createRound: build.mutation<Round, unknown>({
+      roundItem: build.query<EnhancedRoundInfo, string>({
+        query: (id) => {
+          return {
+            url: `/rounds/${id}`,
+            method: "get",
+          }
+        },
+        providesTags: () => {
+          return []
+        },
+      }),
+      createRound: build.mutation<Round, void>({
         query: () => {
           return {
             url: `/rounds`,
@@ -88,6 +99,7 @@ export const appApi = createApi({
 
 export const { 
   useRoundsQuery,
+  useRoundItemQuery,
   useAuthMeQuery,
   useAuthLoginMutation,
   useAuthLogoutMutation,

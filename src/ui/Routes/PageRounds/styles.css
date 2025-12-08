@@ -1,5 +1,6 @@
 .round-list {
     list-style: none;
+    padding: 0;
 }
 
 .round-list li {
@@ -9,6 +10,7 @@
 
 .round-list li {
     border-bottom: 1px solid #888888;
+    cursor: pointer;
 }
 
 .round-list li:first-child {

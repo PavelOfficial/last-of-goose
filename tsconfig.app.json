@@ -22,7 +22,11 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "domain/*": ["./src/domain/*"],
+      "query/*": ["./src/query/*"],
+    },
   },
   "include": ["src"]
 }

@@ -1,13 +1,27 @@
 import { Button, Form, Input } from 'antd';
+import { useAuthLoginMutation } from 'query/api/appApi.api';
+import { authGuard } from '../authGuard';
+import type { FunctionComponent } from 'react';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../store/appSlice';
 
 interface FormShape {
     username: string
     password: string
 }
 
-const AuthPage = () => {
-  const onFinish = (values: FormShape) => {
-    console.log('Success:', values);
+const AuthPageBase: FunctionComponent = () => {
+  const dispatch = useDispatch()
+  const [mutate] = useAuthLoginMutation();
+  const onFinish = async (values: FormShape) => {
+    try {
+      const result = await mutate(values)
+
+      dispatch(setToken({ token: result.data!.token!}))      
+    } catch (error) {
+      console.log(error);
+    }
+    // console.log('Success:', values);
   };
 
   return (
@@ -46,5 +60,7 @@ const AuthPage = () => {
     </Form>
   );
 };
+
+const AuthPage = authGuard(AuthPageBase);
 
 export default AuthPage;

@@ -3,26 +3,24 @@ import { createApi } from "@reduxjs/toolkit/query/react"
 import { baseQuery } from "../baseQuery"
 
 import type { User } from "domain/user";
+import type { Pagination } from "../../libs/Pagination";
+import type { Round } from "domain/Rounds";
 
 export const appApi = createApi({
   reducerPath: "vdsinaAuth",
-  tagTypes: ["authentificated"],
+  tagTypes: ["authentificated", "rounds"],
   baseQuery,
   endpoints: (build) => {
     const authEndpoints = {
       // User groups
-      authMe: build.query<User, unknown>({
-        query: () => {
+      authMe: build.query<User, string | null | undefined>({
+        query: (_)=> {
           return {
             url: `/auth/me`,
             method: "get",
           }
         },
-        providesTags: (_, error) => {
-          if (error) {
-            return []
-          }
-
+        providesTags: () => {
           return ["authentificated"]
         },
       }),
@@ -30,11 +28,17 @@ export const appApi = createApi({
           username: string,
           password: string 
         }>({
-        query: (credentials) => {
+        query: ({ 
+          username,
+          password 
+        }) => {
           return {
-            url: "/credential",
+            url: "/auth/login",
             method: "post",
-            data: credentials,
+            data: { 
+              username,
+              password
+            },
           }
         },
         invalidatesTags: () => {
@@ -52,16 +56,40 @@ export const appApi = createApi({
           return ["authentificated"]
         },
       }),
+      rounds: build.query<Pagination<Round>, unknown>({
+        query: () => {
+          return {
+            url: `/rounds`,
+            method: "get",
+          }
+        },
+        providesTags: () => {
+          return ["rounds"]
+        },
+      }),
+      createRound: build.mutation<Round, unknown>({
+        query: () => {
+          return {
+            url: `/rounds`,
+            method: "post",
+          }
+        },
+        invalidatesTags: () => {
+          return ["rounds"]
+        },
+      }),
     } as const
 
     return {
       ...authEndpoints,
     }
   },
-})
+});
 
 export const { 
+  useRoundsQuery,
   useAuthMeQuery,
   useAuthLoginMutation,
   useAuthLogoutMutation,
+  useCreateRoundMutation,
 } = appApi;

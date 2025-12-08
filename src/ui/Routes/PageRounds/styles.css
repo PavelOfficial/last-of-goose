@@ -1,0 +1,37 @@
+.round-list {
+    list-style: none;
+}
+
+.round-list li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.round-list li {
+    border-bottom: 1px solid #888888;
+}
+
+.round-list li:first-child {
+    border-top: 1px solid #888888;
+}
+
+.round-list dl {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.round-list dl dt {
+    min-width: 30%;
+    margin: 0;
+}
+
+.round-list dl dd {
+    min-width: 70%;
+    margin: 0;
+}
+
+.ant-card-head-title {
+    text-align: center;
+}

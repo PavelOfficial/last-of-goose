@@ -22,3 +22,6 @@ export interface EnhancedRoundInfo {
         score: number,
     },
 }
+
+
+export type RoundMode = "cooldown" | "rounds" | "finished"

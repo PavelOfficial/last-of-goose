@@ -6,7 +6,7 @@ export interface Round {
     "createdAt": string,
 }
 
-interface TopStat {
+export interface TopStat {
     taps: number,
     score: number,
     user: {
@@ -14,14 +14,18 @@ interface TopStat {
     }
 }
 
+export interface Stats {
+  "taps": 0,
+  "score": 0
+}
+
 export interface EnhancedRoundInfo {
     round: Round,
     topStats: TopStat[],
-    myStats: {
-        taps: number,
-        score: number,
-    },
+    myStats: Stats,
 }
+
+
 
 
 export type RoundMode = "cooldown" | "rounds" | "finished"

@@ -4,7 +4,7 @@ import { baseQuery } from "../baseQuery"
 
 import type { User } from "domain/user";
 import type { Pagination } from "../../libs/Pagination";
-import type { EnhancedRoundInfo, Round } from "domain/Rounds";
+import type { EnhancedRoundInfo, Round, Stats } from "domain/Rounds";
 
 export const appApi = createApi({
   reducerPath: "vdsinaAuth",
@@ -89,6 +89,14 @@ export const appApi = createApi({
           return ["rounds"]
         },
       }),
+      roundTap: build.mutation<Stats, string>({
+        query: (id) => {
+          return {
+            url: `/rounds/${id}/tap`,
+            method: "post",
+          }
+        },
+      }),
     } as const
 
     return {
@@ -104,4 +112,5 @@ export const {
   useAuthLoginMutation,
   useAuthLogoutMutation,
   useCreateRoundMutation,
+  useRoundTapMutation,
 } = appApi;

@@ -6,9 +6,9 @@ import "./styles.css";
 import goose from '../../../assets/goose.jpeg'
 import "./styles.css";
 import { authGuard } from "../../authGuard";
-import { useRoundItemQuery } from "query/api/appApi.api";
+import { useRoundItemQuery, useRoundTapMutation } from "query/api/appApi.api";
 
-import type { EnhancedRoundInfo, RoundMode } from "domain/Rounds";
+import type { EnhancedRoundInfo, RoundMode, Stats, TopStat } from "domain/Rounds";
 import { UserName } from "../../Shared/UserName";
 import { leadingZeros } from "../../../libs/leadingZeros";
 
@@ -97,16 +97,46 @@ export const PageRoundItemContent = ({ roundItem, onRefetchData }: Props) => {
         updateCaption();        
     }, [])
 
+    const [roundTapMutation] = useRoundTapMutation()
+    const [myStat, setMyStat] = useState<Stats|null>(null);
+    
+    const handleTapOnGoose = async () => {
+        const now = Date.now();
+
+        if (now > startTime && now < endTime) {
+            try {
+                const response = await roundTapMutation(roundItem.round.id);
+
+                setMyStat(response.data!);
+                console.log("response: ", response);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
     const caption = roundModeCaptions[roundMode];
     const cooldownTime = useCooldownTime(roundMode, "cooldown", startTime);
     const roundCooldownTime = useCooldownTime(roundMode, "rounds", endTime);
+
+    const findWinner = (topStats: TopStat[]) => {
+        let usename: string | null = null;
+        let maxScore:number | null = null;
+        topStats.forEach((topStat) => {
+            if (maxScore === null || topStat.score > maxScore) {
+                maxScore = topStat.score
+                usename = topStat.user.username
+            }
+        })
+
+        return usename;
+    }
 
     return (
         <Card title={caption} 
             extra={<UserName />} 
             style={{ maxWidth: "850px", minWidth: "550px" }}>
-            <img src={goose} alt="goose" height="320px" width="320px" />
-            {JSON.stringify(roundItem)}
+            <img src={goose} onClick={handleTapOnGoose} alt="goose" height="320px" width="320px" />
             {roundMode === "cooldown" &&    
                 <div className="bottom-caption">
                     <div>Cooldown</div><div>До начала раунда: {cooldownTime}</div>
@@ -116,14 +146,14 @@ export const PageRoundItemContent = ({ roundItem, onRefetchData }: Props) => {
                 <div className="bottom-caption">
                     <div>Раунд активен!</div>
                     <div>До окончания раунда: {roundCooldownTime}</div>
-                    <div>Мои очки: 100</div>
+                    <div>Мои очки: {myStat != null ? myStat.score : roundItem.myStats.score}</div>
                 </div>
             }
             {roundMode === "finished" &&  
                 <div className="bottom-caption">
-                    <div>Всего</div>
-                    <div>Победитель</div>
-                    <div>Мои очки</div>
+                    <div>Всего: {roundItem.topStats.reduce((result, item) => { return result + item.score }, 0)}</div>
+                    <div>Победитель: {findWinner(roundItem.topStats)}</div>
+                    <div>Мои очки: {myStat != null ? myStat.score : roundItem.myStats.score}</div>
                 </div>
             }   
         </Card>

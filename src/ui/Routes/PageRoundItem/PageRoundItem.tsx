@@ -8,11 +8,9 @@ import "./styles.css";
 import { authGuard } from "../../authGuard";
 import { useRoundItemQuery, useRoundTapMutation } from "query/api/appApi.api";
 
-import type { EnhancedRoundInfo, RoundMode, Stats, TopStat } from "domain/Rounds";
+import type { EnhancedRoundInfo, RoundMode, Stats } from "domain/Rounds";
 import { UserName } from "../../Shared/UserName";
-import { leadingZeros } from "../../../libs/leadingZeros";
 import { CooldownTimeBoard } from "./CooldownTimeBoard";
-import { useCooldownTime } from "./useCooldownTime";
 import { RoundsBoard } from "./RoundsBoard";
 import { RoundFinishedBoard } from "./RoundFinishedBoard";
 

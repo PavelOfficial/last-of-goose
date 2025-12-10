@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./styles.css";
 
-import goose from '../../../assets/goose.jpeg'
+import goose from 'assets/goose.jpeg'
 import "./styles.css";
 import { authGuard } from "../../authGuard";
 import { useRoundItemQuery, useRoundTapMutation } from "query/api/appApi.api";

@@ -2,3 +2,24 @@
     margin: 20px 0;
     text-align: center;
 }
+
+dl.bottom-caption-results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.bottom-caption-results dt {
+    min-width: 150px;
+}
+
+.bottom-caption-results dd {
+    min-width: calc(100% - 150px);
+    margin-inline-start: 0;
+}
+
+/*
+.bottom-caption-results dd {
+
+}
+*/

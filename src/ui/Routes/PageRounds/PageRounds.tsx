@@ -57,7 +57,11 @@ export const PageRoundsBase = () => {
 
     const handleCreateRound = async () => {
         try {
-            const newRound = await mutationCreateRound()
+            const newRound = await mutationCreateRound();
+            
+            if (newRound.data && newRound.data.id) {
+                navigate(`/rounds/${newRound.data.id}`);
+            }
         } catch (error) {
             console.log(error);
         }    

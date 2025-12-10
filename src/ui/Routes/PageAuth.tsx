@@ -1,7 +1,7 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 import { useAuthLoginMutation } from 'query/api/appApi.api';
 import { authGuard } from '../authGuard';
-import type { FunctionComponent } from 'react';
+import { useState, type FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/appSlice';
 
@@ -13,11 +13,18 @@ interface FormShape {
 const AuthPageBase: FunctionComponent = () => {
   const dispatch = useDispatch()
   const [mutate] = useAuthLoginMutation();
+  const [errorMessage, setErrorMessage] = useState("");
   const onFinish = async (values: FormShape) => {
     try {
-      const result = await mutate(values)
+      const result = await mutate(values);
+      const error = (result.error as any);
 
-      dispatch(setToken({ token: result.data!.token!}))      
+      if (error && error.data!) {
+        setErrorMessage(error.data.message);
+      } else if (result.data) {
+        setErrorMessage("");
+        dispatch(setToken({ token: result.data!.token!}));      
+      }
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +64,7 @@ const AuthPageBase: FunctionComponent = () => {
           Submit
         </Button>
       </Form.Item>
+      <Typography.Text type="danger">{errorMessage}</Typography.Text>
     </Form>
   );
 };
